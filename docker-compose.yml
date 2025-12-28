@@ -1,0 +1,118 @@
+# CRM Platform Workspace - Local Development Environment
+# 全サービスを一括起動するための docker-compose 設定
+#
+# Usage:
+#   docker-compose up -d           # 全サービス起動
+#   docker-compose up -d backend   # Backend のみ起動
+#   docker-compose logs -f         # ログ確認
+
+version: '3.8'
+
+services:
+  # ============================================
+  # Backend API (Express.js)
+  # ============================================
+  backend:
+    build:
+      context: ./crm-backend
+      dockerfile: Dockerfile
+    container_name: crm-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=${DATABASE_URL}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - LINE_CHANNEL_SECRET=${LINE_CHANNEL_SECRET}
+      - LINE_CHANNEL_ACCESS_TOKEN=${LINE_CHANNEL_ACCESS_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - crm-network
+    volumes:
+      - ./crm-backend/src:/app/src:ro
+      - ./crm-backend/logs:/app/logs
+
+  # ============================================
+  # Admin Frontend (Next.js)
+  # ============================================
+  admin:
+    build:
+      context: ./crm-admin
+      dockerfile: Dockerfile
+    container_name: crm-admin
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://backend:3000/api
+    depends_on:
+      - backend
+    networks:
+      - crm-network
+    volumes:
+      - ./crm-admin/src:/app/src:ro
+      - ./crm-admin/app:/app/app:ro
+
+  # ============================================
+  # Web Booking Frontend (Next.js)
+  # ============================================
+  booking:
+    build:
+      context: ./web-booking
+      dockerfile: Dockerfile
+    container_name: crm-booking
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_BASE_URL=http://backend:3000/api
+    depends_on:
+      - backend
+    networks:
+      - crm-network
+    volumes:
+      - ./web-booking/src:/app/src:ro
+      - ./web-booking/app:/app/app:ro
+
+  # ============================================
+  # Redis Cache (Optional)
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: crm-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - crm-network
+    profiles:
+      - full
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  crm-network:
+    driver: bridge
+    name: crm-network
+
+# ============================================
+# Volumes
+# ============================================
+volumes:
+  redis-data:
+    name: crm-redis-data
