@@ -12,6 +12,7 @@ REPOS=(
     "crm-backend"
     "crm-admin"
     "web-booking"
+    "v0-modern-lp-design"
 )
 
 GITHUB_ORG="plus61"

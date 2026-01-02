@@ -1,6 +1,6 @@
 # CRM Platform Workspace
 
-CRM プラットフォームの統合ワークスペースです。以下の3つのリポジトリを一元管理します。
+CRM プラットフォームの統合ワークスペースです。以下の4つのリポジトリを一元管理します。
 
 ## リポジトリ構成
 
@@ -9,6 +9,7 @@ CRM プラットフォームの統合ワークスペースです。以下の3つ
 | [crm-backend](https://github.com/plus61/crm-backend) | REST API サーバー | Express.js + TypeScript | Railway |
 | [crm-admin](https://github.com/plus61/crm-admin) | 管理画面フロントエンド | Next.js + TypeScript | Vercel |
 | [web-booking](https://github.com/plus61/web-booking) | 予約フロントエンド | Next.js + TypeScript | Vercel |
+| [v0-modern-lp-design](https://github.com/plus61/v0-modern-lp-design) | DRAGON AI LP | Next.js + TypeScript | Vercel |
 
 ## クイックスタート
 
@@ -57,7 +58,8 @@ crm-workspace/
 │
 ├── crm-backend/          # Backend API (git clone)
 ├── crm-admin/            # Admin Frontend (git clone)
-└── web-booking/          # Booking Frontend (git clone)
+├── web-booking/          # Booking Frontend (git clone)
+└── v0-modern-lp-design/  # DRAGON AI LP (git clone)
 ```
 
 ## 開発ワークフロー
@@ -88,6 +90,7 @@ chore: その他の変更
 | Backend API | https://crm-backend-production-b5b4.up.railway.app |
 | Admin Panel | https://crm-admin.vercel.app |
 | Web Booking | https://web-booking.vercel.app |
+| DRAGON AI LP | https://v0-dragon-keiei.vercel.app |
 
 ## ライセンス
 
