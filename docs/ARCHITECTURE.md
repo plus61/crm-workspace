@@ -489,7 +489,7 @@ web-booking/
 
 **crm-admin メールテンプレート設定URL**: https://crm-admin-five-gamma.vercel.app/settings/email-template
 
-**web-booking 予約画面URL**: https://web-booking-crm.vercel.app/{projectKey}?leadId={leadId}
+**web-booking 予約画面URL**: https://web-booking-psi.vercel.app/{projectKey}?leadId={leadId}
 
 #### 希少性表示機能
 - 残りスロット数をリアルタイム表示
